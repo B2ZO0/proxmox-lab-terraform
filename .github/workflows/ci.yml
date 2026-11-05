@@ -1,0 +1,27 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        tool: [opentofu, terraform]
+    steps:
+      - uses: actions/checkout@v5
+      - if: matrix.tool == 'opentofu'
+        uses: opentofu/setup-opentofu@v1
+      - if: matrix.tool == 'terraform'
+        uses: hashicorp/setup-terraform@v3
+        with: { terraform_wrapper: false }
+      - name: Format, validate and test (Proxmox provider mocked)
+        run: |
+          BIN=$([ "${{ matrix.tool }}" = opentofu ] && echo tofu || echo terraform)
+          $BIN fmt -check -recursive
+          $BIN init -backend=false -input=false
+          $BIN validate
+          $BIN test
+      - name: Template script syntax
+        run: bash -n scripts/create-debian-template.sh

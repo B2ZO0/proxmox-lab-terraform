@@ -1,0 +1,26 @@
+# Copy to terraform.tfvars and adapt. Never commit the real file (it is in .gitignore).
+proxmox_endpoint = "https://192.168.1.5:8006/"
+node_name        = "pve"
+# The API token is better passed as an environment variable:
+#   export TF_VAR_proxmox_api_token='terraform@pve!lab=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+
+template_id = 9000
+datastore   = "local-lvm"
+bridge      = "vmbr0"
+vlan_id     = 0
+
+network_cidr = "192.168.50.0/24"
+gateway      = "192.168.50.1"
+dns_servers  = ["192.168.50.1"]
+domain       = "lab.local"
+
+ssh_public_keys = [
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIReplaceWithYourOwnKey you@laptop",
+]
+
+# The lab: add, remove or resize VMs here
+vms = {
+  netcockpit = { host_number = 10, role = "netcockpit", cores = 2, memory_mb = 4096, disk_gb = 30 }
+  web01      = { host_number = 21, tags = ["web"] }
+  db01       = { host_number = 31, memory_mb = 2048, disk_gb = 20, tags = ["db"] }
+}
