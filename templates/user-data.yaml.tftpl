@@ -36,7 +36,7 @@ runcmd:
 %{ endif ~}
 %{ if role == "netcockpit" ~}
   - git clone https://github.com/B2ZO0/netcockpit.git /opt/netcockpit
-  - cd /opt/netcockpit && ./setup.sh --yes > /var/log/netcockpit-setup.log 2>&1
+  - cd /opt/netcockpit && umask 077 && ./setup.sh --yes > /var/log/netcockpit-setup.log 2>&1
 %{ endif ~}
 %{ if role != "netcockpit" && netcockpit_host != "" ~}
   - echo "NetCockpit of this lab: http://${netcockpit_host}:8088" > /etc/motd

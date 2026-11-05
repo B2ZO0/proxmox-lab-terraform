@@ -90,6 +90,15 @@ All variables are documented in [`variables.tf`](variables.tf).
 
 The configuration refuses mistakes before touching Proxmox: an unknown role, two VMs on the same address, no SSH key.
 
+## 🔒 Security notes
+
+This is a **lab**: some defaults favour convenience over hardening. Keep it on an isolated network or VLAN.
+
+- `proxmox_insecure = true` accepts the self-signed certificate of Proxmox. With a trusted certificate, set it to `false`.
+- The admin account has **passwordless sudo** and Docker is installed with the official `get.docker.com` script.
+- The API token only needs VM and datastore rights: never use `root@pam`. Pass it as `TF_VAR_proxmox_api_token`, and keep `terraform.tfvars` and `*.tfstate` out of Git (they are in `.gitignore`).
+- NetCockpit asks for a password: it is shown in `/var/log/netcockpit-setup.log` on the netcockpit VM (readable by root only).
+
 ## 🧪 Tested
 
 At every push, with **Terraform and OpenTofu**: `fmt`, `validate`, and `test` with the Proxmox provider **mocked**, so the tests check the plan (VM IDs, addresses, cloud-init content, inventory, refused mistakes) without any Proxmox server.
