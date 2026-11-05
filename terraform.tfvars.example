@@ -1,5 +1,5 @@
 # Copy to terraform.tfvars and adapt. Never commit the real file (it is in .gitignore).
-proxmox_endpoint = "https://192.168.1.5:8006/"
+proxmox_endpoint = "https://pve.lab.local:8006/"
 node_name        = "pve"
 # The API token is better passed as an environment variable:
 #   export TF_VAR_proxmox_api_token='terraform@pve!lab=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
